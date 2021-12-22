@@ -1,0 +1,20 @@
+{
+  "name": "Meet Gif",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Animated GIF Profile Picture in Google Meet",
+  "homepage_url": "https://github.com/eElec/MeetGif",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["https://meet.google.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["js/content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
