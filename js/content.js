@@ -6,6 +6,7 @@ let observerConfig = {
 };
 
 var userData = {};
+var intervalTimer = null;
 
 let observer = new MutationObserver((mutations) => {
 	mutations.forEach((mutation) => {
@@ -89,5 +90,51 @@ function attach() {
 	}
 }
 
-setInterval(attach, 1000);
+// Extension Options
+function stopFun() {
+	if (intervalTimer === null) return;
 
+	clearInterval(intervalTimer);
+	intervalTimer = null;
+	observer.disconnect();
+
+	// Stop all animations and clear all data
+	var pElems = document.querySelectorAll("div[meet-gif-id]");
+	if (pElems !== null) {
+		pElems.forEach((e) => {
+			var participantName = e.getAttribute("meet-gif-id");
+			var user = userData[participantName];
+
+			stoppedTalking(user, e);
+
+			e.removeAttribute("meet-gif-id");
+		});
+	}
+	userData = {};
+}
+
+function startFun() {
+	intervalTimer = setInterval(attach, 1000);
+}
+
+function refresh() {
+	stopFun();
+	startFun();
+}
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+	console.log(request);
+	switch (request.message) {
+		case "startFun":
+			startFun();
+			break;
+		case "stopFun":
+			stopFun();
+			break;
+		case "refresh":
+			refresh();
+			break;
+	}
+});
+
+startFun();
