@@ -81,7 +81,7 @@ function startObserving(nodes) {
 
 // Attach when connected to the meeting
 function attach() {
-	images = document.querySelectorAll('img[src*="googleusercontent.com"]');
+	var images = document.querySelectorAll('img[src*="googleusercontent.com"]');
 
 	if (images.length >= 1) {
 		startObserving(images);
@@ -114,6 +114,9 @@ function stopFun() {
 }
 
 function startFun() {
+	if (intervalTimer !== null) {
+		clearInterval(intervalTimer);
+	}
 	intervalTimer = setInterval(attach, 1000);
 }
 
